@@ -1,0 +1,32 @@
+pkgname="carbonio-libopus"
+pkgver="1.3.1"
+pkgrel="2"
+pkgdesc="Totally open, royalty-free, highly versatile audio codec"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://zextras.com"
+section="libs"
+priority="important"
+source=(
+  "https://archive.mozilla.org/pub/opus/opus-${pkgver}.tar.gz"
+)
+sha256sums=('65b58e1e25b2a114157014736a3d9dfeaad8d41be1c8179866f144a2fb44ff9d')
+
+build() {
+  cd "${srcdir}/opus-${pkgver}"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+
+  autoreconf -fi
+  ./configure \
+    --disable-static \
+    --enable-custom-modes \
+    --prefix=/opt/zextras/common
+  make -j8
+}
+
+package() {
+  cd "${srcdir}/opus-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.la
+}

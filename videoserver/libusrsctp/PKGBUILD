@@ -1,0 +1,33 @@
+pkgname="carbonio-libusrsctp"
+pkgver="0.9.5.0"
+pkgrel="2"
+pkgdesc="A portable SCTP userland stack"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://zextras.com"
+section="libs"
+priority="important"
+makedepends=(
+  "libtool"
+)
+source=(
+  "https://github.com/sctplab/usrsctp/archive/a0cbf4681474fab1e89d9e9e2d5c3694fce50359.tar.gz"
+)
+sha256sums=('8970528ced951650879a14aa60b65190c09cea6bbc70a8fc11154d17c9ca82aa')
+
+build() {
+  cd "${srcdir}/usrsctp-a0cbf4681474fab1e89d9e9e2d5c3694fce50359"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  ./bootstrap
+  ./configure \
+    --disable-debug \
+    --prefix=/opt/zextras/common
+  make -j8
+}
+
+package() {
+  cd "${srcdir}/usrsctp-a0cbf4681474fab1e89d9e9e2d5c3694fce50359"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.a
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.la
+}

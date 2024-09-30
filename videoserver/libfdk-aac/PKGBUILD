@@ -1,0 +1,38 @@
+pkgname="carbonio-libfdk-aac"
+pkgver="2.0.2"
+pkgrel="2"
+pkgdesc="Fraunhofer FDK AAC codec library"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://zextras.com"
+makedepends__apt=(
+  "autoconf"
+  "libtool-bin"
+)
+makedepends__yum=(
+  "autoconf"
+  "libtool"
+)
+section="libs"
+priority="important"
+source=(
+  "https://github.com/mstorsjo/fdk-aac/archive/v${pkgver}.tar.gz"
+)
+sha256sums=('7812b4f0cf66acda0d0fe4302545339517e702af7674dd04e5fe22a5ade16a90')
+
+build() {
+  cd "${srcdir}/fdk-aac-${pkgver}"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+
+  ./autogen.sh
+  ./configure \
+    --prefix=/opt/zextras/common \
+    --disable-static
+  make -j8
+}
+
+package() {
+  cd "${srcdir}/fdk-aac-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.la
+}

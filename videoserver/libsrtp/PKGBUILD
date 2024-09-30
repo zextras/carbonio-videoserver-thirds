@@ -1,0 +1,37 @@
+pkgname="carbonio-libsrtp"
+pkgver="2.4.2"
+pkgrel="3"
+pkgdesc="Library for SRTP (Secure Realtime Transport Protocol)"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://zextras.com"
+depends=(
+  "carbonio-openssl"
+)
+makedepends=(
+  "carbonio-openssl"
+)
+section="libs"
+priority="important"
+source=(
+  "https://github.com/cisco/libsrtp/archive/bd0f27ec0e299ad101a396dde3f7c90d48efc8fc.tar.gz"
+)
+sha256sums=('dcb374501166f9699ef2e7ad5433a79fb04bf229544cfff2bcd55156be4456b8')
+
+build() {
+  cd "${srcdir}/libsrtp-bd0f27ec0e299ad101a396dde3f7c90d48efc8fc"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+
+  ./configure \
+    --enable-openssl \
+    --prefix=/opt/zextras/common
+  make all
+  make shared_library
+}
+
+package() {
+  cd "${srcdir}/libsrtp-bd0f27ec0e299ad101a396dde3f7c90d48efc8fc"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.a
+}

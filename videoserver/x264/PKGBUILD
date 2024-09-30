@@ -1,0 +1,38 @@
+pkgname="carbonio-x264"
+pkgver="0.164.r3081"
+pkgrel="2"
+pkgdesc="Open Source H264/AVC video encoder"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com>"
+url="https://www.videolan.org/developers/x264.html"
+license=("GPL-2.0-only")
+makedepends=(
+  "git"
+  "nasm"
+)
+section="libs"
+priority="important"
+source=(
+  "https://code.videolan.org/videolan/x264/-/archive/19856cc41ad11e434549fb3cc6a019e645ce1efe/x264-19856cc41ad11e434549fb3cc6a019e645ce1efe.tar.gz"
+)
+sha256sums=('11c050a7e6f095be63344f95d453ce9e46681453305c8ea469bcc9b1a7c14ae2')
+
+build() {
+  cd "${srcdir}/x264-19856cc41ad11e434549fb3cc6a019e645ce1efe"
+  ./version.sh | grep X264_POINTVER | sed -r 's/^#define X264_POINTVER "([0-9]+\.[0-9]+)\.([0-9]+) (.*)"$/\1.r\2.\3/'
+
+  ./configure \
+    --disable-avs \
+    --enable-lto \
+    --enable-pic \
+    --enable-shared \
+    --prefix=/opt/zextras/common
+  make -j8
+}
+
+package() {
+  cd "${srcdir}"
+  make -C x264-19856cc41ad11e434549fb3cc6a019e645ce1efe \
+    DESTDIR="${pkgdir}" \
+    install-cli install-lib-shared
+}

@@ -1,0 +1,60 @@
+pkgname="carbonio-librabbitmq-c"
+pkgver="0.11.0"
+pkgrel="2"
+pkgdesc="RabbitMQ(amqp) library written in C-language"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://zextras.com"
+section="libs"
+priority="important"
+depends__apt=(
+  "carbonio-openssl"
+)
+makedepends__apt=(
+  "cmake"
+  "carbonio-openssl"
+)
+depends__yum=(
+  "carbonio-openssl"
+)
+makedepends__yum=(
+  "cmake"
+  "carbonio-openssl"
+)
+
+section="libs"
+priority="important"
+source=(
+  "https://github.com/alanxz/rabbitmq-c/archive/v${pkgver}.tar.gz"
+)
+sha256sums=('437d45e0e35c18cf3e59bcfe5dfe37566547eb121e69fca64b98f5d2c1c2d424')
+
+build() {
+  export CFLAGS="-I/opt/zextras/common/include"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+
+  cd "${srcdir}"
+  cmake \
+    -DCMAKE_INSTALL_PREFIX=/opt/zextras/common \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DBUILD_EXAMPLES=OFF \
+    -DBUILD_TESTS=OFF \
+    -DBUILD_TOOLS=OFF \
+    -DBUILD_TOOLS_DOCS=OFF \
+    -DENABLE_SSL_SUPPORT=ON \
+    -DBUILD_API_DOCS=OFF \
+    -DRUN_SYSTEM_TESTS=OFF \
+    -Wno-dev \
+    -B build \
+    -S "rabbitmq-c-${pkgver}"
+
+  make -C build
+}
+
+package() {
+  cd "${srcdir}"
+
+  make DESTDIR="${pkgdir}" install -C build
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/cmake
+}

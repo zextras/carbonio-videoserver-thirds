@@ -1,0 +1,40 @@
+pkgname="carbonio-libev"
+pkgver="4.33"
+pkgrel="2"
+pkgdesc="A full-featured and high-performance event loop"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://software.schmorp.de/pkg/libev.html"
+license=("GPL-2.0-or-later")
+depends__apt=(
+  "libc6"
+)
+depends__yum=(
+  "glibc"
+)
+
+section="libs"
+priority="important"
+source=(
+  "http://dist.schmorp.de/libev/libev-${pkgver}.tar.gz"
+)
+sha256sums=('507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea')
+
+build() {
+  cd "${srcdir}/libev-${pkgver}"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+  ./configure --prefix=/opt/zextras/common
+  make -j8
+}
+
+package() {
+  cd "${srcdir}/libev-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  # fix conflict with libevent
+  rm "${pkgdir}/opt/zextras/common/include/event.h"
+
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.a
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.la
+}

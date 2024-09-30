@@ -1,0 +1,38 @@
+pkgname="carbonio-libuv"
+pkgver="1.44.2"
+pkgrel="2"
+pkgdesc="Multi-platform support library with a focus on asynchronous I/O"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com>"
+url="https://github.com/libuv/libuv"
+license=("MIT")
+depends__apt=(
+  "libc6"
+)
+depends__yum=(
+  "glibc"
+)
+
+section="libs"
+priority="important"
+source=(
+  "https://dist.libuv.org/dist/v${pkgver}/libuv-v${pkgver}.tar.gz"
+)
+sha256sums=('ccfcdc968c55673c6526d8270a9c8655a806ea92468afcbcabc2b16040f03cb4')
+
+build() {
+  cd "${srcdir}/libuv-v${pkgver}"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+  ./autogen.sh
+  ./configure --prefix=/opt/zextras/common
+  make -j8
+}
+
+package() {
+  cd "${srcdir}/libuv-v${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.a
+  rm -rf "${pkgdir}"/opt/zextras/common/lib/*.la
+}

@@ -1,0 +1,89 @@
+pkgname="carbonio-ffmpeg"
+pkgver="4.4.5"
+pkgrel="1"
+pkgdesc="Complete solution to record, convert and stream audio and video"
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://zextras.com"
+
+depends__apt=(
+  "carbonio-libfdk-aac"
+  "carbonio-libopus"
+  "carbonio-libvpx"
+  "carbonio-x264"
+  "libass9"
+  "libc6"
+  "libfreetype6"
+  "libmp3lame0"
+  "libtheora0"
+  "libxcb1"
+  "zlib1g"
+)
+makedepends__apt=(
+  "libass-dev"
+  "libfreetype6-dev"
+  "libmp3lame-dev"
+  "libtheora-dev"
+  "libxcb1-dev"
+)
+depends__yum=(
+  "carbonio-libfdk-aac"
+  "carbonio-libopus"
+  "carbonio-libvpx"
+  "carbonio-x264"
+  "freetype"
+  "lame-libs"
+  "libass"
+  "libtheora"
+  "libxcb"
+  "zlib"
+)
+makedepends__yum=(
+  "freetype-devel"
+  "lame-devel"
+  "libass-devel"
+  "libtheora-devel"
+  "libxcb-devel"
+  "zlib-devel"
+)
+
+section="libs"
+priority="important"
+source=(
+  "https://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.gz"
+)
+sha256sums=('77e0eedd8ebeafde5807011e700fdea82b306b9f76fe469b4abc5dfefd9579bd')
+
+build() {
+  cd "${srcdir}/ffmpeg-${pkgver}"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+
+  ./configure \
+    --bindir="/opt/zextras/common/bin" \
+    --disable-debug \
+    --disable-static \
+    --disable-stripping \
+    --enable-gpl \
+    --enable-libass \
+    --enable-libfdk-aac \
+    --enable-libfreetype \
+    --enable-libmp3lame \
+    --enable-libopus \
+    --enable-libtheora \
+    --enable-libvpx \
+    --enable-libx264 \
+    --enable-libxcb \
+    --enable-nonfree \
+    --enable-shared \
+    --extra-cflags="-I/opt/zextras/common/include" \
+    --extra-ldflags="-L/opt/zextras/common/lib" \
+    --prefix=/opt/zextras/common
+  make -j8
+}
+
+package() {
+  cd "${srcdir}/ffmpeg-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/opt/zextras/common/share
+}
