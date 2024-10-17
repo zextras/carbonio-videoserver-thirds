@@ -1,0 +1,62 @@
+pkgname=carbonio-mlt
+pkgver=7.28.0
+pkgrel=1
+pkgdesc='An open source multimedia framework'
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://zextras.com"
+
+depends=(
+  'carbonio-ffmpeg'
+  'carbonio-libxml2'
+)
+makedepends=(
+  'carbonio-ffmpeg'
+  'carbonio-libxml2'
+  'cmake'
+)
+provides=("melt")
+conflicts=("melt")
+
+source=("https://github.com/mltframework/mlt/releases/download/v${pkgver}/mlt-${pkgver}.tar.gz")
+sha256sums=('bc425bf9602213f5f4855b78cfbbcd43eeb78097c508588bde44415963955aa1')
+
+build() {
+  export CFLAGS="-I/opt/zextras/common/include"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+
+  cmake -B build -S "${srcdir}/mlt-${pkgver}" \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DMOD_DECKLINK=OFF \
+    -DMOD_GDK=OFF \
+    -DMOD_GLAXNIMATE_QT6=OFF \
+    -DMOD_GLAXNIMATE=OFF \
+    -DMOD_JACKRACK=OFF \
+    -DMOD_KDENLIVE=OFF \
+    -DMOD_MOVIT=OFF \
+    -DMOD_OLDFILM=OFF \
+    -DMOD_OPENCV=OFF \
+    -DMOD_QT=OFF \
+    -DMOD_QT6=OFF \
+    -DMOD_PLUS=OFF \
+    -DMOD_PLUSGPL=OFF \
+    -DMOD_RESAMPLE=OFF \
+    -DMOD_RTAUDIO=OFF \
+    -DMOD_RUBBERBAND=OFF \
+    -DMOD_SDL1=OFF \
+    -DMOD_SDL2=OFF \
+    -DMOD_SOX=OFF \
+    -DMOD_SPATIALAUDIO=OFF \
+    -DMOD_VIDSTAB=OFF \
+    -DMOD_VORBIS=OFF \
+    -DMOD_XINE=OFF \
+    -DSWIG_PYTHON=OFF \
+    -DUSE_LV2=OFF \
+    -DUSE_VST2=OFF
+  cmake --build build
+}
+
+package() {
+  DESTDIR="${pkgdir}" cmake --install build
+}
