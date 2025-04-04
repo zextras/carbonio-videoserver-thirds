@@ -1,5 +1,5 @@
 pkgname=carbonio-mlt
-pkgver=7.28.0
+pkgver=7.30.0
 pkgrel=1
 pkgdesc='An open source multimedia framework'
 arch=('x86_64')
@@ -15,11 +15,34 @@ makedepends=(
   'carbonio-libxml2'
   'cmake'
 )
-provides=("melt")
-conflicts=("melt")
-
+provides__ubuntu_focal=(
+  'melt'
+  'libmlt6'
+  'libmlt-data'
+)
+conflicts__ubuntu_focal=(
+  'melt'
+  'libmlt6'
+  'libmlt-data'
+)
+provides__apt=(
+  'melt'
+  'libmlt7'
+  'libmlt-data'
+)
+conflicts__apt=(
+  'melt'
+  'libmlt7'
+  'libmlt-data'
+)
+provides__yum=(
+  'melt'
+)
+conflicts__yum=(
+  'melt'
+)
 source=("https://github.com/mltframework/mlt/releases/download/v${pkgver}/mlt-${pkgver}.tar.gz")
-sha256sums=('bc425bf9602213f5f4855b78cfbbcd43eeb78097c508588bde44415963955aa1')
+sha256sums=('c802a5fdc16324f6c69273d0bb9718d30c2f635422e171ee01c0e7745e0e793c')
 
 build() {
   export CFLAGS="-I/opt/zextras/common/include"
