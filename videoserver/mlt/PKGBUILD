@@ -1,0 +1,79 @@
+pkgname=carbonio-mlt
+pkgver=6.26.1
+pkgrel=1
+pkgdesc='An open source multimedia framework'
+arch=('x86_64')
+maintainer="Zextras <packages@zextras.com"
+url="https://zextras.com"
+
+depends=(
+  'carbonio-ffmpeg'
+  'carbonio-libxml2'
+)
+makedepends=(
+  'carbonio-ffmpeg'
+  'carbonio-libxml2'
+  'cmake'
+)
+provides__ubuntu_focal=(
+  'melt'
+  'libmlt6'
+  'libmlt-data'
+)
+conflicts__ubuntu_focal=(
+  'melt'
+  'libmlt6'
+  'libmlt-data'
+)
+provides__apt=(
+  'melt'
+  'libmlt7'
+  'libmlt-data'
+)
+conflicts__apt=(
+  'melt'
+  'libmlt7'
+  'libmlt-data'
+)
+provides__yum=(
+  'melt'
+)
+conflicts__yum=(
+  'melt'
+)
+source=("https://github.com/mltframework/mlt/releases/download/v${pkgver}/mlt-${pkgver}.tar.gz")
+sha256sums=('8a484bbbf51f33e25312757531f3ad2ce20607149d20fcfcb40a3c1e60b20b4e')
+
+build() {
+  export CFLAGS="-I/opt/zextras/common/include"
+  export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+
+  cmake -B build -S "${srcdir}/mlt-${pkgver}" \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DMOD_DECKLINK=OFF \
+    -DMOD_GDK=OFF \
+    -DMOD_GTK2=OFF \
+    -DMOD_JACKRACK=OFF \
+    -DMOD_KDENLIVE=OFF \
+    -DMOD_OLDFILM=OFF \
+    -DMOD_OPENCV=OFF \
+    -DMOD_QT=OFF \
+    -DMOD_PLUS=OFF \
+    -DMOD_PLUSGPL=OFF \
+    -DMOD_RESAMPLE=OFF \
+    -DMOD_RTAUDIO=OFF \
+    -DMOD_RUBBERBAND=OFF \
+    -DMOD_SDL1=OFF \
+    -DMOD_SDL2=OFF \
+    -DMOD_SOX=OFF \
+    -DMOD_VIDSTAB=OFF \
+    -DMOD_VORBIS=OFF \
+    -DMOD_XINE=OFF \
+    -DSWIG_PYTHON=OFF
+  cmake --build build
+}
+
+package() {
+  DESTDIR="${pkgdir}" cmake --install build
+}

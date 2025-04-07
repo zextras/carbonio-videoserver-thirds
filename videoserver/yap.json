@@ -7,7 +7,7 @@
         {
             "name": "x264",
             "install": true
-        },        
+        },
         {
             "name": "libev",
             "install": true
@@ -35,6 +35,9 @@
         {
             "name": "ffmpeg",
             "install": true
+        },
+        {
+            "name": "mlt"
         },
         {
             "name": "libsrtp",
