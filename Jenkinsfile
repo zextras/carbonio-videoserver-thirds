@@ -56,7 +56,7 @@ pipeline {
                 sh 'sudo mv auth.conf /etc/apt'
             }
             sh '''
-            sudo echo "deb [trusted=yes] https://zextras.jfrog.io/artifactory/ubuntu-devel focal main" > zextras.list
+            sudo echo "deb [trusted=yes] https://zextras.jfrog.io/artifactory/ubuntu-rc focal main" > zextras.list
             sudo mv zextras.list /etc/apt/sources.list.d/
             '''
             script {
@@ -99,7 +99,7 @@ pipeline {
                 sh 'sudo mv auth.conf /etc/apt'
             }
             sh '''
-            sudo echo "deb [trusted=yes] https://zextras.jfrog.io/artifactory/ubuntu-devel jammy main" > zextras.list
+            sudo echo "deb [trusted=yes] https://zextras.jfrog.io/artifactory/ubuntu-rc jammy main" > zextras.list
             sudo mv zextras.list /etc/apt/sources.list.d/
             '''
             script {
@@ -142,7 +142,7 @@ pipeline {
                 sh 'sudo mv auth.conf /etc/apt'
             }
             sh '''
-            sudo echo "deb [trusted=yes] https://zextras.jfrog.io/artifactory/ubuntu-devel noble main" > zextras.list
+            sudo echo "deb [trusted=yes] https://zextras.jfrog.io/artifactory/ubuntu-rc noble main" > zextras.list
             sudo mv zextras.list /etc/apt/sources.list.d/
             '''
             script {
@@ -180,10 +180,10 @@ pipeline {
               passwordVariable: 'SECRET',
               usernameVariable: 'USERNAME')]) {
                 sh 'echo "[Zextras]" > zextras.repo'
-                sh 'echo "baseurl=https://$USERNAME:$SECRET@zextras.jfrog.io/artifactory/centos8-devel/" >> zextras.repo'
+                sh 'echo "baseurl=https://$USERNAME:$SECRET@zextras.jfrog.io/artifactory/centos8-rc/" >> zextras.repo'
                 sh 'echo "enabled=1" >> zextras.repo'
                 sh 'echo "gpgcheck=0" >> zextras.repo'
-                sh 'echo "gpgkey=https://$USERNAME:$SECRET@zextras.jfrog.io/artifactory/centos8-devel/repomd.xml.key" >> zextras.repo'
+                sh 'echo "gpgkey=https://$USERNAME:$SECRET@zextras.jfrog.io/artifactory/centos8-rc/repomd.xml.key" >> zextras.repo'
                 sh 'sudo mv zextras.repo /etc/yum.repos.d/zextras.repo'
             }
             script {
@@ -221,10 +221,10 @@ pipeline {
               passwordVariable: 'SECRET',
               usernameVariable: 'USERNAME')]) {
                 sh 'echo "[Zextras]" > zextras.repo'
-                sh 'echo "baseurl=https://$USERNAME:$SECRET@zextras.jfrog.io/artifactory/rhel9-devel/" >> zextras.repo'
+                sh 'echo "baseurl=https://$USERNAME:$SECRET@zextras.jfrog.io/artifactory/rhel9-rc/" >> zextras.repo'
                 sh 'echo "enabled=1" >> zextras.repo'
                 sh 'echo "gpgcheck=0" >> zextras.repo'
-                sh 'echo "gpgkey=https://$USERNAME:$SECRET@zextras.jfrog.io/artifactory/rhel9-devel/repomd.xml.key" >> zextras.repo'
+                sh 'echo "gpgkey=https://$USERNAME:$SECRET@zextras.jfrog.io/artifactory/rhel9-rc/repomd.xml.key" >> zextras.repo'
                 sh 'sudo mv zextras.repo /etc/yum.repos.d/zextras.repo'
             }
             script {
@@ -341,6 +341,11 @@ pipeline {
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
               },
               {
+                "pattern": "artifacts/x86_64/(carbonio-mlt)-(*).el8.x86_64.rpm",
+                "target": "centos8-playground/zextras/{1}/{1}-{2}.el8.x86_64.rpm",
+                "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
+              },         
+              {
                 "pattern": "artifacts/x86_64/(carbonio-x264)-(*).el8.x86_64.rpm",
                 "target": "centos8-playground/zextras/{1}/{1}-{2}.el8.x86_64.rpm",
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
@@ -397,6 +402,11 @@ pipeline {
               },
               {
                 "pattern": "artifacts/x86_64/(carbonio-libwebsockets)-(*).el9.x86_64.rpm",
+                "target": "rhel9-playground/zextras/{1}/{1}-{2}.el9.x86_64.rpm",
+                "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
+              },
+              {
+                "pattern": "artifacts/x86_64/(carbonio-mlt)-(*).el9.x86_64.rpm",
                 "target": "rhel9-playground/zextras/{1}/{1}-{2}.el9.x86_64.rpm",
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
               },
@@ -500,12 +510,7 @@ pipeline {
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
               },
               {
-                "pattern": "artifacts/x86_64/(carbonio-videoserver-ce)-(*).el8.x86_64.rpm",
-                "target": "centos8-devel/zextras/{1}/{1}-{2}.el8.x86_64.rpm",
-                "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
-              },
-              {
-                "pattern": "artifacts/x86_64/(carbonio-videoserver-confs-ce)-(*).el8.x86_64.rpm",
+                "pattern": "artifacts/x86_64/(carbonio-mlt)-(*).el8.x86_64.rpm",
                 "target": "centos8-devel/zextras/{1}/{1}-{2}.el8.x86_64.rpm",
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
               },
@@ -566,6 +571,11 @@ pipeline {
               },
               {
                 "pattern": "artifacts/x86_64/(carbonio-libwebsockets)-(*).el9.x86_64.rpm",
+                "target": "rhel9-devel/zextras/{1}/{1}-{2}.el9.x86_64.rpm",
+                "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
+              },
+              {
+                "pattern": "artifacts/x86_64/(carbonio-mlt)-(*).el9.x86_64.rpm",
                 "target": "rhel9-devel/zextras/{1}/{1}-{2}.el9.x86_64.rpm",
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
               },
@@ -704,6 +714,11 @@ pipeline {
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
               },
               {
+                "pattern": "artifacts/x86_64/(carbonio-mlt)-(*).el8.x86_64.rpm",
+                "target": "centos8-rc/zextras/{1}/{1}-{2}.el8.x86_64.rpm",
+                "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
+              },
+              {
                 "pattern": "artifacts/x86_64/(carbonio-x264)-(*).el8.x86_64.rpm",
                 "target": "centos8-rc/zextras/{1}/{1}-{2}.el8.x86_64.rpm",
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
@@ -785,6 +800,11 @@ pipeline {
               },
               {
                 "pattern": "artifacts/x86_64/(carbonio-libwebsockets)-(*).el9.x86_64.rpm",
+                "target": "rhel9-rc/zextras/{1}/{1}-{2}.el9.x86_64.rpm",
+                "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
+              },
+              {
+                "pattern": "artifacts/x86_64/(carbonio-mlt)-(*).el9.x86_64.rpm",
                 "target": "rhel9-rc/zextras/{1}/{1}-{2}.el9.x86_64.rpm",
                 "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras;vcs.revision=${env.GIT_COMMIT}"
               },
