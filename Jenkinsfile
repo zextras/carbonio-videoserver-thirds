@@ -64,7 +64,6 @@ pipeline {
           }
 
           buildStage([
-            prepare: true,
             overrides: [
               'ubuntu-jammy': [
                 preBuildScript: '''
@@ -87,6 +86,7 @@ pipeline {
                 '''
               ],
               'rocky-8': [
+                prepare: true,
                 preBuildScript: '''
                   echo "[Zextras]" > zextras.repo
                   echo "name=Zextras" >> zextras.repo
@@ -98,6 +98,7 @@ pipeline {
                 ''',
               ],
               'rocky-9': [
+                prepare: true,
                 preBuildScript: '''
                   echo "[Zextras]" > zextras.repo
                   echo "name=Zextras" >> zextras.repo
