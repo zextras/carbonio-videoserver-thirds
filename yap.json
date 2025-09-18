@@ -1,58 +1,58 @@
 {
     "name": "Zextras Videoserver",
-    "Description": "Carbonio videoserver thirds",
+    "description": "Carbonio videoserver thirds",
     "buildDir": "/tmp/",
     "output": "artifacts",
-    "Projects": [
+    "projects": [
         {
-            "name": "x264",
+            "name": "videoserver/x264",
             "install": true
         },
         {
-            "name": "libev",
+            "name": "videoserver/libev",
             "install": true
         },
         {
-            "name": "libuv",
+            "name": "videoserver/libuv",
             "install": true
         },
         {
-            "name": "libwebsockets",
+            "name": "videoserver/libwebsockets",
             "install": true
         },
         {
-            "name": "libvpx",
+            "name": "videoserver/libvpx",
             "install": true
         },
         {
-            "name": "libopus",
+            "name": "videoserver/libopus",
             "install": true
         },
         {
-            "name": "libfdk-aac",
+            "name": "videoserver/libfdk-aac",
             "install": true
         },
         {
-            "name": "ffmpeg",
+            "name": "videoserver/ffmpeg",
             "install": true
         },
         {
-            "name": "mlt"
+            "name": "videoserver/mlt"
         },
         {
-            "name": "libsrtp",
+            "name": "videoserver/libsrtp",
             "install": true
         },
         {
-            "name": "libnice",
+            "name": "videoserver/libnice",
             "install": true
         },
         {
-            "name": "libusrsctp",
+            "name": "videoserver/libusrsctp",
             "install": true
         },
         {
-            "name": "librabbitmq-c"
+            "name": "videoserver/librabbitmq-c"
         }
     ]
 }
