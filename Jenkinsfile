@@ -64,6 +64,7 @@ pipeline {
           }
 
           buildStage([
+            prepare: true,
             overrides: [
               'ubuntu-jammy': [
                 preBuildScript: '''
