@@ -1,5 +1,5 @@
 pkgname=carbonio-mlt
-pkgver=6.26.1
+pkgver=7.32.0
 pkgrel=2
 pkgdesc='An open source multimedia framework'
 arch=('x86_64')
@@ -45,7 +45,7 @@ replaces__yum=(
   'mlt'
 )
 source=("https://github.com/mltframework/mlt/releases/download/v${pkgver}/mlt-${pkgver}.tar.gz")
-sha256sums=('8a484bbbf51f33e25312757531f3ad2ce20607149d20fcfcb40a3c1e60b20b4e')
+sha256sums=('1ca5aadfe27995c879b9253b3a48d1dcc3b1247ea0b5620b087d58f5521be028')
 
 build() {
   export CFLAGS="-I/opt/zextras/common/include"
