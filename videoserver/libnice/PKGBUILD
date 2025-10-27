@@ -1,5 +1,5 @@
 pkgname="carbonio-libnice"
-pkgver="0.1.22"
+pkgver="0.1.22" # renovate: datasource=github-releases depName=libnice/libnice
 pkgrel="2"
 pkgdesc="An implementation of the IETF's draft ICE (for p2p UDP data streams)"
 arch=('x86_64')
