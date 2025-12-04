@@ -1,5 +1,5 @@
 pkgname="carbonio-ffmpeg"
-pkgver="4.4.5"
+pkgver="4.4.5" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
 pkgrel="1"
 pkgdesc="Complete solution to record, convert and stream audio and video"
 arch=('x86_64')

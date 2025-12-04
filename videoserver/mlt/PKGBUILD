@@ -1,5 +1,5 @@
 pkgname=carbonio-mlt
-pkgver=6.26.1
+pkgver=6.26.1 # renovate: datasource=github-releases depName=mltframework/mlt
 pkgrel=2
 pkgdesc='An open source multimedia framework'
 arch=('x86_64')

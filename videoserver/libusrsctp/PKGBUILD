@@ -1,5 +1,5 @@
 pkgname="carbonio-libusrsctp"
-pkgver="0.9.5.0"
+pkgver="0.9.5.0" # renovate: datasource=github-releases depName=sctplab/usrsctp
 pkgrel="2"
 pkgdesc="A portable SCTP userland stack"
 arch=('x86_64')

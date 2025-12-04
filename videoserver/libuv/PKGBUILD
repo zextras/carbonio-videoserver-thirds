@@ -1,5 +1,5 @@
 pkgname="carbonio-libuv"
-pkgver="1.44.2"
+pkgver="1.44.2" # renovate: datasource=github-releases depName=libuv/libuv
 pkgrel="2"
 pkgdesc="Multi-platform support library with a focus on asynchronous I/O"
 arch=('x86_64')

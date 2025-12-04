@@ -1,5 +1,5 @@
 pkgname="carbonio-libwebsockets"
-pkgver="4.3.3"
+pkgver="4.3.3" # renovate: datasource=github-releases depName=warmcat/libwebsockets
 pkgrel="1"
 pkgdesc="C library for websocket clients and servers"
 arch=('x86_64')
