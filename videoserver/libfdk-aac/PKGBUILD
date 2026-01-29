@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname="carbonio-libfdk-aac"
 pkgver="2.0.2" # renovate: datasource=github-releases depName=mstorsjo/fdk-aac
 pkgrel="2"

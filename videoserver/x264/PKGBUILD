@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname="carbonio-x264"
 pkgver="0.164.r3108" # renovate: datasource=gitlab-tags depName=videolan/x264
 pkgrel="1"

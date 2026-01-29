@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname="carbonio-libsrtp"
 pkgver="2.4.2" # renovate: datasource=github-releases depName=cisco/libsrtp
 pkgrel="3"

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname="carbonio-ffmpeg"
 pkgver="4.4.5" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
 pkgrel="1"
