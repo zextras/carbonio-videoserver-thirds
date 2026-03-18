@@ -54,10 +54,12 @@ sha256sums=('0d2b956864ba2ff58bb4e2b2779aa36870bd2a3a835e2dbfda33faa5fc6f4d3a')
 build() {
   export CFLAGS="-I/opt/zextras/common/include"
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:$PKG_CONFIG_PATH"
+  export PATH="/opt/zextras/common/bin:$PATH"
 
   cmake -B build -S "${srcdir}/mlt-${pkgver}" \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_PREFIX_PATH="/opt/zextras/common" \
     -DMOD_DECKLINK=OFF \
     -DMOD_GDK=OFF \
     -DMOD_GTK2=OFF \
