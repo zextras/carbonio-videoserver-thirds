@@ -4,7 +4,7 @@
 
 pkgname="carbonio-libfdk-aac"
 pkgver="2.0.3" # renovate: datasource=github-releases depName=mstorsjo/fdk-aac
-pkgrel="2"
+pkgrel="1"
 pkgdesc="Fraunhofer FDK AAC codec library"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com"

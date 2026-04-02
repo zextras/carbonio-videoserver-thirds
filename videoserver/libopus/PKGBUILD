@@ -4,7 +4,7 @@
 
 pkgname="carbonio-libopus"
 pkgver="1.6.1" # renovate: datasource=repology depName=opus
-pkgrel="2"
+pkgrel="1"
 pkgdesc="Totally open, royalty-free, highly versatile audio codec"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com"
