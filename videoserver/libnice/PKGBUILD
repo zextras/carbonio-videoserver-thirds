@@ -13,12 +13,12 @@ depends__apt=(
   "carbonio-openssl"
 )
 makedepends__apt=(
-  "carbonio-openssl"
+  "libglib2.0-dev"
   "ninja-build"
   "python3-pip"
 )
 makedepends__ubuntu_noble=(
-  "carbonio-openssl"
+  "libglib2.0-dev"
   "meson"
   "ninja-build"
 )
@@ -26,7 +26,7 @@ depends__yum=(
   "carbonio-openssl"
 )
 makedepends__yum=(
-  "carbonio-openssl"
+  "glib2-devel"
   "meson"
   "ninja-build"
 )
@@ -39,6 +39,7 @@ sha256sums=('3048b847fd89f43474c1a77257c875a85e4d85c879d12743f3ce2947125eb8de')
 
 build__apt() {
   cd "${srcdir}/libnice-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
   pip3 install meson
   meson \
@@ -50,6 +51,7 @@ build__apt() {
 
 build__ubuntu_noble() {
   cd "${srcdir}/libnice-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
   meson \
     --libdir=lib \
@@ -60,6 +62,7 @@ build__ubuntu_noble() {
 
 build__yum() {
   cd "${srcdir}/libnice-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
   meson \
     --libdir=lib \

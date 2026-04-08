@@ -29,6 +29,7 @@ makedepends__apt=(
   "libmp3lame-dev"
   "libtheora-dev"
   "libxcb1-dev"
+  "nasm"
 )
 depends__yum=(
   "carbonio-libfdk-aac"
@@ -48,6 +49,7 @@ makedepends__yum=(
   "libass-devel"
   "libtheora-devel"
   "libxcb-devel"
+  "nasm"
   "zlib-devel"
 )
 
@@ -60,6 +62,7 @@ sha256sums=('77e0eedd8ebeafde5807011e700fdea82b306b9f76fe469b4abc5dfefd9579bd')
 
 build() {
   cd "${srcdir}/ffmpeg-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
 
@@ -83,7 +86,7 @@ build() {
     --extra-cflags="-I/opt/zextras/common/include" \
     --extra-ldflags="-L/opt/zextras/common/lib" \
     --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

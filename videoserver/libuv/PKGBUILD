@@ -17,6 +17,11 @@ depends__yum=(
   "glibc"
 )
 
+makedepends=(
+  "autoconf"
+  "automake"
+  "libtool"
+)
 section="libs"
 priority="important"
 source=(
@@ -26,11 +31,12 @@ sha256sums=('ccfcdc968c55673c6526d8270a9c8655a806ea92468afcbcabc2b16040f03cb4')
 
 build() {
   cd "${srcdir}/libuv-v${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
   ./autogen.sh
   ./configure --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {
