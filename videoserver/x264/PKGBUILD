@@ -23,6 +23,7 @@ sha256sums=('d053c9d86988d6bc78237ca5205865c5ddf99c98ef4cd9927eec8f6d388f6dd9')
 
 build() {
   cd "${srcdir}/x264-31e19f92f00c7003fa115047ce50978bc98c3a0d"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   ./version.sh | grep X264_POINTVER | sed -r 's/^#define X264_POINTVER "([0-9]+\.[0-9]+)\.([0-9]+) (.*)"$/\1.r\2.\3/'
 
   ./configure \
@@ -31,7 +32,7 @@ build() {
     --enable-pic \
     --enable-shared \
     --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

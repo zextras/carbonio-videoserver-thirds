@@ -11,19 +11,11 @@ maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 section="libs"
 priority="important"
-depends__apt=(
+depends=(
   "carbonio-openssl"
 )
-makedepends__apt=(
+makedepends=(
   "cmake"
-  "carbonio-openssl"
-)
-depends__yum=(
-  "carbonio-openssl"
-)
-makedepends__yum=(
-  "cmake"
-  "carbonio-openssl"
 )
 
 section="libs"
@@ -34,7 +26,7 @@ source=(
 sha256sums=('437d45e0e35c18cf3e59bcfe5dfe37566547eb121e69fca64b98f5d2c1c2d424')
 
 build() {
-  export CFLAGS="-I/opt/zextras/common/include"
+  export CFLAGS="-I/opt/zextras/common/include -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
 
@@ -53,7 +45,7 @@ build() {
     -B build \
     -S "rabbitmq-c-${pkgver}"
 
-  make -C build
+  make -C build -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

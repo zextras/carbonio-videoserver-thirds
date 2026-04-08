@@ -11,10 +11,12 @@ maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 makedepends__apt=(
   "autoconf"
+  "automake"
   "libtool-bin"
 )
 makedepends__yum=(
   "autoconf"
+  "automake"
   "libtool"
 )
 section="libs"
@@ -26,13 +28,15 @@ sha256sums=('7812b4f0cf66acda0d0fe4302545339517e702af7674dd04e5fe22a5ade16a90')
 
 build() {
   cd "${srcdir}/fdk-aac-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
+  export CXXFLAGS="${CXXFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
 
   ./autogen.sh
   ./configure \
     --prefix=/opt/zextras/common \
     --disable-static
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

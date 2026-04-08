@@ -15,8 +15,6 @@ depends=(
   'carbonio-libxml2'
 )
 makedepends=(
-  'carbonio-ffmpeg'
-  'carbonio-libxml2'
   'cmake'
 )
 provides__ubuntu_focal=(
@@ -52,7 +50,7 @@ source=("https://github.com/mltframework/mlt/releases/download/v${pkgver}/mlt-${
 sha256sums=('8a484bbbf51f33e25312757531f3ad2ce20607149d20fcfcb40a3c1e60b20b4e')
 
 build() {
-  export CFLAGS="-I/opt/zextras/common/include"
+  export CFLAGS="-I/opt/zextras/common/include -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
 
