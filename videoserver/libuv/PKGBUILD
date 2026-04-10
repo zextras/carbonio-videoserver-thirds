@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-libuv"
-pkgver="1.44.2" # renovate: datasource=github-releases depName=libuv/libuv
-pkgrel="2"
+pkgver="1.52.1" # renovate: datasource=github-releases depName=libuv/libuv
+pkgrel="1"
 pkgdesc="Multi-platform support library with a focus on asynchronous I/O"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com>"
@@ -22,7 +22,7 @@ priority="important"
 source=(
   "https://dist.libuv.org/dist/v${pkgver}/libuv-v${pkgver}.tar.gz"
 )
-sha256sums=('ccfcdc968c55673c6526d8270a9c8655a806ea92468afcbcabc2b16040f03cb4')
+sha256sums=('66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7')
 
 build() {
   cd "${srcdir}/libuv-v${pkgver}"

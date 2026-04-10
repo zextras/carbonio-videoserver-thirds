@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-librabbitmq-c"
-pkgver="0.11.0" # renovate: datasource=github-releases depName=alanxz/rabbitmq-c
-pkgrel="2"
+pkgver="0.15.0" # renovate: datasource=github-releases depName=alanxz/rabbitmq-c
+pkgrel="1"
 pkgdesc="RabbitMQ(amqp) library written in C-language"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com"
@@ -31,7 +31,7 @@ priority="important"
 source=(
   "https://github.com/alanxz/rabbitmq-c/archive/v${pkgver}.tar.gz"
 )
-sha256sums=('437d45e0e35c18cf3e59bcfe5dfe37566547eb121e69fca64b98f5d2c1c2d424')
+sha256sums=('7b652df52c0de4d19ca36c798ed81378cba7a03a0f0c5d498881ae2d79b241c2')
 
 build() {
   export CFLAGS="-I/opt/zextras/common/include"

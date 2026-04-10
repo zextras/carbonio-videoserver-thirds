@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-libsrtp"
-pkgver="2.4.2" # renovate: datasource=github-releases depName=cisco/libsrtp
-pkgrel="3"
+pkgver="2.8.0" # renovate: datasource=github-releases depName=cisco/libsrtp
+pkgrel="1"
 pkgdesc="Library for SRTP (Secure Realtime Transport Protocol)"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com"
@@ -18,12 +18,12 @@ makedepends=(
 section="libs"
 priority="important"
 source=(
-  "https://github.com/cisco/libsrtp/archive/bd0f27ec0e299ad101a396dde3f7c90d48efc8fc.tar.gz"
+  "https://github.com/cisco/libsrtp/archive/refs/tags/v${pkgver}.tar.gz"
 )
-sha256sums=('dcb374501166f9699ef2e7ad5433a79fb04bf229544cfff2bcd55156be4456b8')
+sha256sums=('d123dcff5c56d4f1a9006f2b311ea99a85016cbf3bb24b1007885d422237db85')
 
 build() {
-  cd "${srcdir}/libsrtp-bd0f27ec0e299ad101a396dde3f7c90d48efc8fc"
+  cd "${srcdir}/libsrtp-${pkgver}"
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
 
@@ -35,7 +35,7 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/libsrtp-bd0f27ec0e299ad101a396dde3f7c90d48efc8fc"
+  cd "${srcdir}/libsrtp-${pkgver}"
   make DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}"/opt/zextras/common/lib/*.a
 }
