@@ -72,7 +72,7 @@ build() {
     -DMOD_NORMALIZE=OFF \
     -DMOD_OLDFILM=OFF \
     -DMOD_OPENCV=OFF \
-    -DMOD_PLUS=OFF \
+    -DMOD_PLUS=ON \
     -DMOD_PLUSGPL=OFF \
     -DMOD_QT6=OFF \
     -DMOD_RESAMPLE=OFF \
