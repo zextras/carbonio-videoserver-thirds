@@ -58,7 +58,7 @@ build() {
   export PATH="/opt/zextras/common/bin:$PATH"
 
   cmake -B build -S "${srcdir}/mlt-${pkgver}" \
-    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_PREFIX="/opt/zextras/common" \
     -DCMAKE_PREFIX_PATH="/opt/zextras/common" \
     -DMOD_DECKLINK=OFF \
     -DMOD_FREI0R=OFF \
