@@ -71,6 +71,7 @@ build() {
     -DMOD_NDI=OFF \
     -DMOD_NORMALIZE=OFF \
     -DMOD_OLDFILM=OFF \
+    -DMOD_OPENFX=OFF \
     -DMOD_OPENCV=OFF \
     -DMOD_PLUS=ON \
     -DMOD_PLUSGPL=OFF \
