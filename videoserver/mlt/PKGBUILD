@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname=carbonio-mlt
-pkgver=7.36.1 # renovate: datasource=github-releases depName=mltframework/mlt
+pkgver=7.38.0 # renovate: datasource=github-releases depName=mltframework/mlt
 pkgrel=1
 pkgdesc='An open source multimedia framework'
 arch=('x86_64')

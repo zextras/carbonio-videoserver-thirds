@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-ffmpeg"
-pkgver="8.0.1" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
+pkgver="8.1" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
 pkgrel="1"
 pkgdesc="Complete solution to record, convert and stream audio and video"
 arch=('x86_64')
