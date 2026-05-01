@@ -56,7 +56,7 @@ priority="important"
 source=(
   "https://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.gz"
 )
-sha256sums=('ed1cfade43aab7711c88937a0afc15b7b22efdc528c6ff074b4027c55a3c175c')
+sha256sums=('b13510e7a6a4ca28fa04307f2be54ef5a31e168eb2bbe055a7f4e4d2cadd51b1')
 
 build() {
   cd "${srcdir}/ffmpeg-${pkgver}"
