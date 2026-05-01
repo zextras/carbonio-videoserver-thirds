@@ -19,16 +19,13 @@ depends__apt=(
   "libc6"
   "libfreetype6"
   "libmp3lame0"
-  "libtheora0"
-  "libxcb1"
   "zlib1g"
 )
 makedepends__apt=(
   "libass-dev"
   "libfreetype6-dev"
   "libmp3lame-dev"
-  "libtheora-dev"
-  "libxcb1-dev"
+  "zlib1g-dev"
 )
 depends__yum=(
   "carbonio-libfdk-aac"
@@ -38,16 +35,12 @@ depends__yum=(
   "freetype"
   "lame-libs"
   "libass"
-  "libtheora"
-  "libxcb"
   "zlib"
 )
 makedepends__yum=(
   "freetype-devel"
   "lame-devel"
   "libass-devel"
-  "libtheora-devel"
-  "libxcb-devel"
   "zlib-devel"
 )
 
@@ -74,10 +67,8 @@ build() {
     --enable-libfreetype \
     --enable-libmp3lame \
     --enable-libopus \
-    --enable-libtheora \
     --enable-libvpx \
     --enable-libx264 \
-    --enable-libxcb \
     --enable-nonfree \
     --enable-shared \
     --extra-cflags="-I/opt/zextras/common/include" \
