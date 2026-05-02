@@ -16,12 +16,12 @@ depends=(
 )
 makedepends__apt=(
   "cmake"
-  "carbonio-openssl"
+  "libglib2.0-dev"
   "zlib1g-dev"
 )
 makedepends__yum=(
-  "carbonio-openssl"
   "cmake"
+  "glib2-devel"
   "libuv"
   "zlib-devel"
 )
@@ -35,6 +35,7 @@ sha256sums=('b6ade658f4af3a823d0dc806ae5ef0623f0f4f5e2aeb895a0f77c4783840c30e')
 
 build() {
   cd "${srcdir}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   mkdir build || true
   cmake \
     -D CMAKE_INSTALL_PREFIX=/opt/zextras/common \
@@ -77,7 +78,7 @@ build() {
     -B build \
     -S "libwebsockets-${pkgver}"
 
-  make -C build -j8
+  make -C build -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

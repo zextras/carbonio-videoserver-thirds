@@ -21,6 +21,8 @@ sha256sums=('7a479a3c66b9f5d5542a4c6a1b7d3768a983b1e5c14c60a9396edc9b649e015c')
 
 build() {
   cd "${srcdir}/libvpx-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
+  export CXXFLAGS="${CXXFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
 
   ./configure \
@@ -36,7 +38,7 @@ build() {
     --enable-vp9-highbitdepth \
     --enable-vp9-temporal-denoising \
     --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

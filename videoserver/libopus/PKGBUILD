@@ -11,6 +11,11 @@ maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 section="libs"
 priority="important"
+makedepends=(
+  "autoconf"
+  "automake"
+  "libtool"
+)
 source=(
   "https://downloads.xiph.org/releases/opus/opus-${pkgver}.tar.gz"
 )
@@ -18,6 +23,7 @@ sha256sums=('6ffcb593207be92584df15b32466ed64bbec99109f007c82205f0194572411a1')
 
 build() {
   cd "${srcdir}/opus-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
 
@@ -26,7 +32,7 @@ build() {
     --disable-static \
     --enable-custom-modes \
     --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

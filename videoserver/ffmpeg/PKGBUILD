@@ -26,6 +26,7 @@ makedepends__apt=(
   "libfreetype6-dev"
   "libmp3lame-dev"
   "zlib1g-dev"
+  "nasm"
 )
 depends__yum=(
   "carbonio-libfdk-aac"
@@ -41,6 +42,7 @@ makedepends__yum=(
   "freetype-devel"
   "lame-devel"
   "libass-devel"
+  "nasm"
   "zlib-devel"
 )
 
@@ -53,6 +55,7 @@ sha256sums=('b13510e7a6a4ca28fa04307f2be54ef5a31e168eb2bbe055a7f4e4d2cadd51b1')
 
 build() {
   cd "${srcdir}/ffmpeg-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
 
@@ -74,7 +77,7 @@ build() {
     --extra-cflags="-I/opt/zextras/common/include" \
     --extra-ldflags="-L/opt/zextras/common/lib" \
     --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {
