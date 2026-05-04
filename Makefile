@@ -44,7 +44,6 @@ CONTAINER_OPTS = --rm \
 	-v $(CURDIR)/$(OUTPUT_DIR):/artifacts \
 	-v $(CCACHE_DIR):/root/.ccache \
 	-e CCACHE_DIR=/root/.ccache \
-	--cap-add NET_ADMIN \
 	--entrypoint bash
 
 .PHONY: help build build-macos build-linux pull clean list-targets list-packages

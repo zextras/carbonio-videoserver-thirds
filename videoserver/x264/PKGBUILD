@@ -16,13 +16,14 @@ makedepends=(
 )
 section="libs"
 priority="important"
+_commit="b35605ace3ddf7c1a5d67a2eb553f034aef41d55"
 source=(
-  "https://code.videolan.org/videolan/x264/-/archive/b35605ace3ddf7c1a5d67a2eb553f034aef41d55/x264-b35605ace3ddf7c1a5d67a2eb553f034aef41d55.tar.gz"
+  "https://code.videolan.org/videolan/x264/-/archive/${_commit}/x264-${_commit}.tar.gz"
 )
 sha256sums=('cd71a7515b0e9a012e1ac9b1f8415bebcaf6fc97d4db32286642ac4c0fbe24f9')
 
 build() {
-  cd "${srcdir}/x264-b35605ace3ddf7c1a5d67a2eb553f034aef41d55"
+  cd "${srcdir}/x264-${_commit}"
   export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   ./version.sh | grep X264_POINTVER | sed -r 's/^#define X264_POINTVER "([0-9]+\.[0-9]+)\.([0-9]+) (.*)"$/\1.r\2.\3/'
 
@@ -37,7 +38,7 @@ build() {
 
 package() {
   cd "${srcdir}"
-  make -C x264-b35605ace3ddf7c1a5d67a2eb553f034aef41d55 \
+  make -C x264-${_commit} \
     DESTDIR="${pkgdir}" \
     install-cli install-lib-shared
 }

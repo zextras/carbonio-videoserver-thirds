@@ -53,7 +53,6 @@ build() {
   export CFLAGS="-I/opt/zextras/common/include -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:$PKG_CONFIG_PATH"
-  export PATH="/opt/zextras/common/bin:$PATH"
 
   cmake -B build -S "${srcdir}/mlt-${pkgver}" \
     -DCMAKE_INSTALL_PREFIX="/opt/zextras/common" \
