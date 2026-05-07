@@ -6,7 +6,8 @@
 
 # Configuration
 YAP_IMAGE_PREFIX ?= docker.io/m0rf30/yap
-YAP_VERSION      ?= 1.47
+YAP_VERSION      ?= 1.54
+
 # Prefer podman if installed AND reachable; fall back to docker if it is running;
 # last resort: whichever binary exists (let the runtime emit the real error).
 CONTAINER_RUNTIME ?= $(shell \
