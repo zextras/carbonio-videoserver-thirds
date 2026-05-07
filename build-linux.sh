@@ -6,10 +6,10 @@
 
 set -e
 
-# This script runs INSIDE the container
-# It installs dependencies, prepares yap, and builds the package
+# This script runs INSIDE the container on real x86_64 hardware (Linux CI).
+# LTO is enabled and no QEMU workarounds are applied.
 #
-# Usage (inside container): ./build-in-container.sh <deps-dir|none> <distro>
+# Usage (inside container): ./build-linux.sh <deps-dir|none> <distro>
 
 DEPS_DIR=$1
 DISTRO=$2
@@ -24,7 +24,7 @@ echo "==> Building carbonio-videoserver-thirds for $DISTRO"
 # Install dependencies if provided
 if [ "$DEPS_DIR" != "none" ] && [ -n "$DEPS_DIR" ]; then
     echo "==> Installing dependencies from $DEPS_DIR"
-    
+
     if [ -f /etc/debian_version ]; then
         # Ubuntu/Debian
         apt-get update

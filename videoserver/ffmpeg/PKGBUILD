@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-ffmpeg"
-pkgver="4.4.5" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
+pkgver="8.1" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
 pkgrel="1"
 pkgdesc="Complete solution to record, convert and stream audio and video"
 arch=('x86_64')
@@ -19,16 +19,13 @@ depends__apt=(
   "libc6"
   "libfreetype6"
   "libmp3lame0"
-  "libtheora0"
-  "libxcb1"
   "zlib1g"
 )
 makedepends__apt=(
   "libass-dev"
   "libfreetype6-dev"
   "libmp3lame-dev"
-  "libtheora-dev"
-  "libxcb1-dev"
+  "zlib1g-dev"
   "nasm"
 )
 depends__yum=(
@@ -39,16 +36,12 @@ depends__yum=(
   "freetype"
   "lame-libs"
   "libass"
-  "libtheora"
-  "libxcb"
   "zlib"
 )
 makedepends__yum=(
   "freetype-devel"
   "lame-devel"
   "libass-devel"
-  "libtheora-devel"
-  "libxcb-devel"
   "nasm"
   "zlib-devel"
 )
@@ -58,7 +51,7 @@ priority="important"
 source=(
   "https://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.gz"
 )
-sha256sums=('77e0eedd8ebeafde5807011e700fdea82b306b9f76fe469b4abc5dfefd9579bd')
+sha256sums=('b13510e7a6a4ca28fa04307f2be54ef5a31e168eb2bbe055a7f4e4d2cadd51b1')
 
 build() {
   cd "${srcdir}/ffmpeg-${pkgver}"
@@ -77,10 +70,8 @@ build() {
     --enable-libfreetype \
     --enable-libmp3lame \
     --enable-libopus \
-    --enable-libtheora \
     --enable-libvpx \
     --enable-libx264 \
-    --enable-libxcb \
     --enable-nonfree \
     --enable-shared \
     --extra-cflags="-I/opt/zextras/common/include" \

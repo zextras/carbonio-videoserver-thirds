@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-libnice"
-pkgver="0.1.22" # renovate: datasource=github-releases depName=libnice/libnice
-pkgrel="2"
+pkgver="0.1.23" # renovate: datasource=github-releases depName=libnice/libnice
+pkgrel="1"
 pkgdesc="An implementation of the IETF's draft ICE (for p2p UDP data streams)"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com"
@@ -35,7 +35,7 @@ priority="important"
 source=(
   "https://github.com/libnice/libnice/archive/${pkgver}.tar.gz"
 )
-sha256sums=('3048b847fd89f43474c1a77257c875a85e4d85c879d12743f3ce2947125eb8de')
+sha256sums=('cd69da89d70b529e2eac955de006503a318123d36196482b14005a83e7cb2c21')
 
 build__apt() {
   cd "${srcdir}/libnice-${pkgver}"

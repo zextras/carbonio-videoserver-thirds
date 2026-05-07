@@ -3,21 +3,21 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-libvpx"
-pkgver="1.13.1" # renovate: datasource=github-releases depName=webmproject/libvpx
+pkgver="1.16.0" # renovate: datasource=github-releases depName=webmproject/libvpx
 pkgrel="1"
 pkgdesc="VP8 and VP9 codec"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 makedepends=(
-  "yasm"
+  "nasm"
 )
 section="libs"
 priority="important"
 source=(
   "https://github.com/webmproject/libvpx/archive/v${pkgver}.tar.gz"
 )
-sha256sums=('00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14')
+sha256sums=('7a479a3c66b9f5d5542a4c6a1b7d3768a983b1e5c14c60a9396edc9b649e015c')
 
 build() {
   cd "${srcdir}/libvpx-${pkgver}"
@@ -26,7 +26,7 @@ build() {
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
 
   ./configure \
-    --as=yasm \
+    --as=nasm \
     --disable-install-docs \
     --disable-install-srcs \
     --enable-pic \

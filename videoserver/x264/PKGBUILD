@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-x264"
-pkgver="0.164.r3108" # renovate: datasource=gitlab-tags depName=videolan/x264
+pkgver="0.165.r3222" # renovate: datasource=gitlab-tags depName=videolan/x264
 pkgrel="1"
 pkgdesc="Open Source H264/AVC video encoder"
 arch=('x86_64')
@@ -16,13 +16,14 @@ makedepends=(
 )
 section="libs"
 priority="important"
+_commit="b35605ace3ddf7c1a5d67a2eb553f034aef41d55"
 source=(
-  "https://code.videolan.org/videolan/x264/-/archive/31e19f92f00c7003fa115047ce50978bc98c3a0d/x264-31e19f92f00c7003fa115047ce50978bc98c3a0d.tar.gz"
+  "https://code.videolan.org/videolan/x264/-/archive/${_commit}/x264-${_commit}.tar.gz"
 )
-sha256sums=('d053c9d86988d6bc78237ca5205865c5ddf99c98ef4cd9927eec8f6d388f6dd9')
+sha256sums=('cd71a7515b0e9a012e1ac9b1f8415bebcaf6fc97d4db32286642ac4c0fbe24f9')
 
 build() {
-  cd "${srcdir}/x264-31e19f92f00c7003fa115047ce50978bc98c3a0d"
+  cd "${srcdir}/x264-${_commit}"
   export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   ./version.sh | grep X264_POINTVER | sed -r 's/^#define X264_POINTVER "([0-9]+\.[0-9]+)\.([0-9]+) (.*)"$/\1.r\2.\3/'
 
@@ -37,7 +38,7 @@ build() {
 
 package() {
   cd "${srcdir}"
-  make -C x264-31e19f92f00c7003fa115047ce50978bc98c3a0d \
+  make -C x264-${_commit} \
     DESTDIR="${pkgdir}" \
     install-cli install-lib-shared
 }
