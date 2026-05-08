@@ -39,6 +39,7 @@ build() {
   mkdir build || true
   cmake \
     -D CMAKE_INSTALL_PREFIX=/opt/zextras/common \
+    -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_SHARED_LINKER_FLAGS="-Wl,-rpath,/opt/zextras/common/lib" \
     -D LIBEV_INCLUDE_DIRS="/opt/zextras/common/include" \
     -D LIBEV_LIBRARIES="/opt/zextras/common/lib/libev.so" \

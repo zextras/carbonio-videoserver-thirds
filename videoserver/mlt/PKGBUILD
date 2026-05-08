@@ -56,6 +56,7 @@ build() {
 
   cmake -B build -S "${srcdir}/mlt-${pkgver}" \
     -DCMAKE_INSTALL_PREFIX="/opt/zextras/common" \
+    -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_PREFIX_PATH="/opt/zextras/common" \
     -DMOD_DECKLINK=OFF \
     -DMOD_FREI0R=OFF \
