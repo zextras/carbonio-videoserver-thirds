@@ -16,14 +16,42 @@ DISTRO=${1:-ubuntu-jammy}
 
 echo "==> Building carbonio-videoserver-thirds for $DISTRO"
 
-# Set up base tools and Zextras apt repo
-echo "==> Installing base tools"
-apt-get update -qq
-apt-get install -y -qq gnupg2 ca-certificates curl
+# Detect package manager family
+if [ -f /etc/debian_version ]; then
+    PKG_FAMILY="debian"
+elif [ -f /etc/redhat-release ]; then
+    PKG_FAMILY="rhel"
+else
+    echo "Error: Unknown Linux distribution in container"
+    exit 1
+fi
 
-echo "==> Setting up public Zextras repository"
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 52FD40243E584A21
-echo "deb https://repo.zextras.io/release/ubuntu jammy main" > /etc/apt/sources.list.d/zextras.list
+echo "==> Installing base tools (PKG_FAMILY=$PKG_FAMILY)"
+if [ "$PKG_FAMILY" = "debian" ]; then
+    apt-get update -qq
+    apt-get install -y -qq gnupg2 ca-certificates curl
+
+    echo "==> Setting up public Zextras repository"
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 52FD40243E584A21
+    UBUNTU_CODENAME="${DISTRO#ubuntu-}"
+    echo "deb https://repo.zextras.io/release/ubuntu ${UBUNTU_CODENAME} main" > /etc/apt/sources.list.d/zextras.list
+else
+    dnf install -y -q curl ca-certificates 2>/dev/null || true
+
+    echo "==> Setting up public Zextras repository"
+    case "$DISTRO" in
+        rocky-8) RHEL_REPO="rhel8" ;;
+        rocky-9) RHEL_REPO="rhel9" ;;
+        *) echo "Error: Unknown RHEL distro variant: $DISTRO"; exit 1 ;;
+    esac
+    cat > /etc/yum.repos.d/zextras.repo <<EOF
+[zextras]
+name=Zextras
+baseurl=https://repo.zextras.io/release/${RHEL_REPO}/
+enabled=1
+gpgcheck=0
+EOF
+fi
 
 # Work on a copy of the project so that local patches never touch host files
 BUILD_DIR=$(mktemp -d)

@@ -39,6 +39,29 @@ if [ "$DEPS_DIR" != "none" ] && [ -n "$DEPS_DIR" ]; then
     echo "==> Dependencies installed"
 fi
 
+# Set up public Zextras repository
+echo "==> Setting up public Zextras repository"
+if [ -f /etc/debian_version ]; then
+    apt-get update -qq
+    apt-get install -y -qq gnupg2 ca-certificates curl
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 52FD40243E584A21
+    UBUNTU_CODENAME="${DISTRO#ubuntu-}"
+    echo "deb https://repo.zextras.io/release/ubuntu ${UBUNTU_CODENAME} main" > /etc/apt/sources.list.d/zextras.list
+elif [ -f /etc/redhat-release ]; then
+    case "$DISTRO" in
+        rocky-8) RHEL_REPO="rhel8" ;;
+        rocky-9) RHEL_REPO="rhel9" ;;
+        *) echo "Error: Unknown RHEL distro variant: $DISTRO"; exit 1 ;;
+    esac
+    cat > /etc/yum.repos.d/zextras.repo <<EOF
+[zextras]
+name=Zextras
+baseurl=https://repo.zextras.io/release/${RHEL_REPO}/
+enabled=1
+gpgcheck=0
+EOF
+fi
+
 # Prepare yap
 echo "==> Running yap prepare $DISTRO -g"
 yap prepare "$DISTRO" -g
