@@ -6,46 +6,32 @@ pkgname="carbonio-ffmpeg"
 pkgver="8.1" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
 pkgrel="1"
 pkgdesc="Complete solution to record, convert and stream audio and video"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
-
 depends__apt=(
-  "carbonio-libfdk-aac"
   "carbonio-libopus"
   "carbonio-libvpx"
   "carbonio-x264"
-  "libass9"
   "libc6"
-  "libfreetype6"
-  "libmp3lame0"
   "zlib1g"
 )
-makedepends__apt=(
-  "libass-dev"
-  "libfreetype6-dev"
-  "libmp3lame-dev"
-  "zlib1g-dev"
-  "nasm"
-)
 depends__yum=(
-  "carbonio-libfdk-aac"
   "carbonio-libopus"
   "carbonio-libvpx"
   "carbonio-x264"
-  "freetype"
-  "lame-libs"
-  "libass"
   "zlib"
 )
-makedepends__yum=(
-  "freetype-devel"
-  "lame-devel"
-  "libass-devel"
+makedepends__apt=(
   "nasm"
+  "pkg-config"
+  "zlib1g-dev"
+)
+makedepends__yum=(
+  "nasm"
+  "pkgconf-pkg-config"
   "zlib-devel"
 )
-
 section="libs"
 priority="important"
 source=(
@@ -57,27 +43,29 @@ build() {
   cd "${srcdir}/ffmpeg-${pkgver}"
   export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:/opt/zextras/common/lib64/pkgconfig"
+
+  _cross_flags=""
+  if [ -n "${CROSS_COMPILE}" ] && echo "${CROSS_COMPILE}" | grep -q "aarch64"; then
+    _cross_flags="--enable-cross-compile --cross-prefix=${CROSS_COMPILE} --arch=aarch64 --target-os=linux"
+  fi
 
   ./configure \
     --bindir="/opt/zextras/common/bin" \
+    --pkg-config=pkg-config \
     --disable-debug \
     --disable-static \
     --disable-stripping \
     --enable-gpl \
-    --enable-libass \
-    --enable-libfdk-aac \
-    --enable-libfreetype \
-    --enable-libmp3lame \
     --enable-libopus \
     --enable-libvpx \
     --enable-libx264 \
-    --enable-nonfree \
     --enable-shared \
     --extra-cflags="-I/opt/zextras/common/include" \
     --extra-ldflags="-L/opt/zextras/common/lib" \
-    --prefix=/opt/zextras/common
-  make -j"$(( $(nproc) / 2 ))"
+    --prefix=/opt/zextras/common \
+    ${_cross_flags}
+  make -j"$(($(nproc) / 2))"
 }
 
 package() {

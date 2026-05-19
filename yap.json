@@ -9,27 +9,11 @@
             "install": true
         },
         {
-            "name": "videoserver/libev",
-            "install": true
-        },
-        {
-            "name": "videoserver/libuv",
-            "install": true
-        },
-        {
-            "name": "videoserver/libwebsockets",
-            "install": true
-        },
-        {
             "name": "videoserver/libvpx",
             "install": true
         },
         {
             "name": "videoserver/libopus",
-            "install": true
-        },
-        {
-            "name": "videoserver/libfdk-aac",
             "install": true
         },
         {

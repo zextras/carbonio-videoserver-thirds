@@ -6,39 +6,29 @@ pkgname=carbonio-mlt
 pkgver=7.38.0 # renovate: datasource=github-releases depName=mltframework/mlt
 pkgrel=1
 pkgdesc='An open source multimedia framework'
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
-
 depends=(
   'carbonio-ffmpeg'
   'carbonio-libxml2'
 )
 makedepends=(
   'cmake'
-)
-provides__ubuntu_focal=(
-  'melt'
-  'libmlt6'
-  'libmlt-data'
-)
-conflicts__ubuntu_focal=(
-  'melt'
-  'libmlt6'
-  'libmlt-data'
+  'carbonio-libxml2'
 )
 provides__apt=(
   'melt'
   'libmlt7'
   'libmlt-data'
 )
+provides__yum=(
+  'mlt'
+)
 conflicts__apt=(
   'melt'
   'libmlt7'
   'libmlt-data'
-)
-provides__yum=(
-  'mlt'
 )
 conflicts__yum=(
   'mlt'
@@ -52,7 +42,18 @@ sha256sums=('b8f0a23c89e9250edc5038d745537c382367bf2ad3dad5d5c7cd13b0fe1c4144')
 build() {
   export CFLAGS="-I/opt/zextras/common/include -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:$PKG_CONFIG_PATH"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:/opt/zextras/common/lib64/pkgconfig:$PKG_CONFIG_PATH"
+
+  _cmake_cross_flags=""
+  if [ -n "${CROSS_COMPILE}" ]; then
+    _cmake_cross_flags="-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}"
+    # Tell the yap-generated toolchain file to also search the carbonio prefix
+    # so FindFFmpeg.cmake and other Find modules locate cross-built packages.
+    export YAP_CMAKE_EXTRA_ROOT_PATH="/opt/zextras/common"
+    # Extend PKG_CONFIG_LIBDIR (replaces default) to include carbonio prefix
+    # alongside the cross-arch system paths yap already set.
+    export PKG_CONFIG_LIBDIR="/opt/zextras/common/lib/pkgconfig:/opt/zextras/common/lib64/pkgconfig:${PKG_CONFIG_LIBDIR}"
+  fi
 
   cmake -B build -S "${srcdir}/mlt-${pkgver}" \
     -DCMAKE_INSTALL_PREFIX="/opt/zextras/common" \
@@ -70,7 +71,7 @@ build() {
     -DMOD_OLDFILM=OFF \
     -DMOD_OPENFX=OFF \
     -DMOD_OPENCV=OFF \
-    -DMOD_PLUS=ON \
+    -DMOD_PLUS=OFF \
     -DMOD_PLUSGPL=OFF \
     -DMOD_QT6=OFF \
     -DMOD_RESAMPLE=OFF \
@@ -83,7 +84,8 @@ build() {
     -DMOD_VIDSTAB=OFF \
     -DMOD_VORBIS=OFF \
     -DMOD_XINE=OFF \
-    -DSWIG_PYTHON=OFF
+    -DSWIG_PYTHON=OFF \
+    ${_cmake_cross_flags}
   cmake --build build
 }
 
