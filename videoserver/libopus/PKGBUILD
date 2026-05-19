@@ -6,7 +6,7 @@ pkgname="carbonio-libopus"
 pkgver="1.6.1" # renovate: datasource=repology depName=opus
 pkgrel="1"
 pkgdesc="Totally open, royalty-free, highly versatile audio codec"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 section="libs"
@@ -25,14 +25,26 @@ build() {
   cd "${srcdir}/opus-${pkgver}"
   export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:/opt/zextras/common/lib64/pkgconfig"
+
+  _host_flag=""
+  _build_flag=""
+  if [ -n "${CROSS_COMPILE}" ]; then
+    export CC="${CROSS_COMPILE}gcc"
+    export CXX="${CROSS_COMPILE}g++"
+    export AR="${CROSS_COMPILE}ar"
+    export RANLIB="${CROSS_COMPILE}ranlib"
+    _host_flag="--host=${CROSS_COMPILE_HOST}"
+    _build_flag="--build=$(gcc -dumpmachine)"
+  fi
 
   autoreconf -fi
   ./configure \
     --disable-static \
-    --enable-custom-modes \
-    --prefix=/opt/zextras/common
-  make -j"$(( $(nproc) / 2 ))"
+    --libdir=/opt/zextras/common/lib \
+    --prefix=/opt/zextras/common \
+    ${_host_flag} ${_build_flag}
+  make -j"$(($(nproc) / 2))"
 }
 
 package() {

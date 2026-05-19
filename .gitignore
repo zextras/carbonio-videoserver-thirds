@@ -10,3 +10,7 @@ artifacts
 .idea
 *.iml
 *.tar.gz
+videoserver/*/src/
+videoserver/*/pkg-*/
+videoserver/*/arch-*/
+build/
