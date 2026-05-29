@@ -6,12 +6,10 @@ pkgname="carbonio-libsrtp"
 pkgver="2.8.0" # renovate: datasource=github-releases depName=cisco/libsrtp
 pkgrel="1"
 pkgdesc="Library for SRTP (Secure Realtime Transport Protocol)"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
-depends=(
-  "carbonio-openssl"
-)
+depends=("carbonio-openssl")
 section="libs"
 priority="important"
 source=(
@@ -23,13 +21,25 @@ build() {
   cd "${srcdir}/libsrtp-${pkgver}"
   export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:/opt/zextras/common/lib64/pkgconfig"
+
+  _host_flag=""
+  _build_flag=""
+  if [ -n "${CROSS_COMPILE}" ]; then
+    export CC="${CROSS_COMPILE}gcc"
+    export CXX="${CROSS_COMPILE}g++"
+    export AR="${CROSS_COMPILE}ar"
+    export RANLIB="${CROSS_COMPILE}ranlib"
+    _host_flag="--host=${CROSS_COMPILE_HOST}"
+    _build_flag="--build=$(gcc -dumpmachine)"
+  fi
 
   ./configure \
     --enable-openssl \
-    --prefix=/opt/zextras/common
-  make all -j"$(( $(nproc) / 2 ))"
-  make shared_library -j"$(( $(nproc) / 2 ))"
+    --prefix=/opt/zextras/common \
+    ${_host_flag} ${_build_flag}
+  make all -j"$(($(nproc) / 2))"
+  make shared_library -j"$(($(nproc) / 2))"
 }
 
 package() {

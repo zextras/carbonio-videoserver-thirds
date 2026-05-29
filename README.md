@@ -13,12 +13,8 @@ The Carbonio video server requires several multimedia and networking libraries t
 ## Included Libraries
 
 - **x264** - H.264/AVC video encoder
-- **libev** - High-performance event loop library
-- **libuv** - Multi-platform async I/O library
-- **libwebsockets** - WebSocket library
 - **libvpx** - VP8/VP9 video codec
 - **libopus** - Opus audio codec
-- **libfdk-aac** - AAC audio codec
 - **ffmpeg** - Multimedia framework
 - **mlt** - Multimedia framework
 - **libsrtp** - Secure Real-time Transport Protocol

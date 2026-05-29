@@ -6,11 +6,12 @@ pkgname="carbonio-libvpx"
 pkgver="1.16.0" # renovate: datasource=github-releases depName=webmproject/libvpx
 pkgrel="1"
 pkgdesc="VP8 and VP9 codec"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 makedepends=(
   "nasm"
+  "perl"
 )
 section="libs"
 priority="important"
@@ -25,8 +26,18 @@ build() {
   export CXXFLAGS="${CXXFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
 
+  _target_flag=""
+  _as_flag="--as=nasm"
+  if [ -n "${CROSS_COMPILE}" ] && echo "${CROSS_COMPILE}" | grep -q "aarch64"; then
+    export CC="${CROSS_COMPILE}gcc"
+    export CXX="${CROSS_COMPILE}g++"
+    export AR="${CROSS_COMPILE}ar"
+    _target_flag="--target=arm64-linux-gcc"
+    _as_flag=""
+  fi
+
   ./configure \
-    --as=nasm \
+    ${_as_flag} \
     --disable-install-docs \
     --disable-install-srcs \
     --enable-pic \
@@ -37,8 +48,9 @@ build() {
     --enable-vp9 \
     --enable-vp9-highbitdepth \
     --enable-vp9-temporal-denoising \
-    --prefix=/opt/zextras/common
-  make -j"$(( $(nproc) / 2 ))"
+    --prefix=/opt/zextras/common \
+    ${_target_flag}
+  make -j"$(($(nproc) / 2))"
 }
 
 package() {
