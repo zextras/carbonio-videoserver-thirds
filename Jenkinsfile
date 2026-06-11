@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 library(
-    identifier: 'jenkins-lib-common@1.7.5',
+    identifier: 'jenkins-lib-common@v2.11.2',
     retriever: modernSCM([
         $class: 'GitSCMSource',
         credentialsId: 'jenkins-integration-with-github-account',
@@ -34,10 +34,18 @@ pipeline {
     stage('Setup') {
       steps {
         checkout scm
-        script {
-          gitMetadata()
-        }
+        gitMetadata()
       }
+    }
+
+    stage('Skip CI') {
+      steps {
+        script { semanticRelease.guard() }
+      }
+    }
+
+    stage('Security Scan') {
+      steps { gitleaksStage() }
     }
 
     stage('Build deb/rpm') {
@@ -65,9 +73,7 @@ pipeline {
         jfrog 'jfrog-cli'
       }
       steps {
-        uploadStage([
-          packages: yapHelper.getPackageNames()
-        ])
+        uploadStage()
       }
       post {
         failure {
@@ -77,6 +83,12 @@ pipeline {
             }
           }
         }
+      }
+    }
+
+    stage('Semantic Release') {
+      steps {
+        semanticRelease()
       }
     }
   }
