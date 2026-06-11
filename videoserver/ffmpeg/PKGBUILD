@@ -1,5 +1,9 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname="carbonio-ffmpeg"
-pkgver="4.4.5"
+pkgver="8.1" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
 pkgrel="1"
 pkgdesc="Complete solution to record, convert and stream audio and video"
 arch=('x86_64')
@@ -15,16 +19,14 @@ depends__apt=(
   "libc6"
   "libfreetype6"
   "libmp3lame0"
-  "libtheora0"
-  "libxcb1"
   "zlib1g"
 )
 makedepends__apt=(
   "libass-dev"
   "libfreetype6-dev"
   "libmp3lame-dev"
-  "libtheora-dev"
-  "libxcb1-dev"
+  "zlib1g-dev"
+  "nasm"
 )
 depends__yum=(
   "carbonio-libfdk-aac"
@@ -34,16 +36,13 @@ depends__yum=(
   "freetype"
   "lame-libs"
   "libass"
-  "libtheora"
-  "libxcb"
   "zlib"
 )
 makedepends__yum=(
   "freetype-devel"
   "lame-devel"
   "libass-devel"
-  "libtheora-devel"
-  "libxcb-devel"
+  "nasm"
   "zlib-devel"
 )
 
@@ -52,10 +51,11 @@ priority="important"
 source=(
   "https://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.gz"
 )
-sha256sums=('77e0eedd8ebeafde5807011e700fdea82b306b9f76fe469b4abc5dfefd9579bd')
+sha256sums=('b13510e7a6a4ca28fa04307f2be54ef5a31e168eb2bbe055a7f4e4d2cadd51b1')
 
 build() {
   cd "${srcdir}/ffmpeg-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
 
@@ -70,16 +70,14 @@ build() {
     --enable-libfreetype \
     --enable-libmp3lame \
     --enable-libopus \
-    --enable-libtheora \
     --enable-libvpx \
     --enable-libx264 \
-    --enable-libxcb \
     --enable-nonfree \
     --enable-shared \
     --extra-cflags="-I/opt/zextras/common/include" \
     --extra-ldflags="-L/opt/zextras/common/lib" \
     --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

@@ -1,5 +1,9 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname="carbonio-libev"
-pkgver="4.33"
+pkgver="4.33" # renovate: datasource=repology depName=libev
 pkgrel="2"
 pkgdesc="A full-featured and high-performance event loop"
 arch=('x86_64')
@@ -22,10 +26,11 @@ sha256sums=('507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea')
 
 build() {
   cd "${srcdir}/libev-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
   ./configure --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

@@ -1,16 +1,22 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname="carbonio-libfdk-aac"
-pkgver="2.0.2"
-pkgrel="2"
+pkgver="2.0.3" # renovate: datasource=github-releases depName=mstorsjo/fdk-aac
+pkgrel="1"
 pkgdesc="Fraunhofer FDK AAC codec library"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 makedepends__apt=(
   "autoconf"
+  "automake"
   "libtool-bin"
 )
 makedepends__yum=(
   "autoconf"
+  "automake"
   "libtool"
 )
 section="libs"
@@ -18,17 +24,19 @@ priority="important"
 source=(
   "https://github.com/mstorsjo/fdk-aac/archive/v${pkgver}.tar.gz"
 )
-sha256sums=('7812b4f0cf66acda0d0fe4302545339517e702af7674dd04e5fe22a5ade16a90')
+sha256sums=('e25671cd96b10bad896aa42ab91a695a9e573395262baed4e4a2ff178d6a3a78')
 
 build() {
   cd "${srcdir}/fdk-aac-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
+  export CXXFLAGS="${CXXFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
 
   ./autogen.sh
   ./configure \
     --prefix=/opt/zextras/common \
     --disable-static
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {

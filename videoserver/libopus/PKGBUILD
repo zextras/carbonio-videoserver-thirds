@@ -1,19 +1,29 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 pkgname="carbonio-libopus"
-pkgver="1.3.1"
-pkgrel="2"
+pkgver="1.6.1" # renovate: datasource=repology depName=opus
+pkgrel="1"
 pkgdesc="Totally open, royalty-free, highly versatile audio codec"
 arch=('x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 section="libs"
 priority="important"
-source=(
-  "https://archive.mozilla.org/pub/opus/opus-${pkgver}.tar.gz"
+makedepends=(
+  "autoconf"
+  "automake"
+  "libtool"
 )
-sha256sums=('65b58e1e25b2a114157014736a3d9dfeaad8d41be1c8179866f144a2fb44ff9d')
+source=(
+  "https://downloads.xiph.org/releases/opus/opus-${pkgver}.tar.gz"
+)
+sha256sums=('6ffcb593207be92584df15b32466ed64bbec99109f007c82205f0194572411a1')
 
 build() {
   cd "${srcdir}/opus-${pkgver}"
+  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
   export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
 
@@ -22,7 +32,7 @@ build() {
     --disable-static \
     --enable-custom-modes \
     --prefix=/opt/zextras/common
-  make -j8
+  make -j"$(( $(nproc) / 2 ))"
 }
 
 package() {
