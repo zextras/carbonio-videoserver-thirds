@@ -6,7 +6,7 @@ pkgname="carbonio-libusrsctp"
 pkgver="0.9.5.0" # renovate: datasource=github-releases depName=sctplab/usrsctp
 pkgrel="2"
 pkgdesc="A portable SCTP userland stack"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
 section="libs"
@@ -25,11 +25,29 @@ build() {
   cd "${srcdir}/usrsctp-a0cbf4681474fab1e89d9e9e2d5c3694fce50359"
   export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
+
+  _host_flag=""
+  _build_flag=""
+  if [ -n "${CROSS_COMPILE}" ]; then
+    export CC="${CROSS_COMPILE}gcc"
+    export CXX="${CROSS_COMPILE}g++"
+    export AR="${CROSS_COMPILE}ar"
+    export RANLIB="${CROSS_COMPILE}ranlib"
+    _host_flag="--host=${CROSS_COMPILE_HOST}"
+    _build_flag="--build=$(gcc -dumpmachine)"
+    # struct in6_pktinfo requires _GNU_SOURCE on aarch64 cross-compiler headers.
+    # Suppress packed-member alignment warnings: usrsctp has intentional packed
+    # struct pointer casts that are valid on aarch64 but trigger -Werror on
+    # stricter cross-compiler toolchains.
+    export CFLAGS="${CFLAGS} -D_GNU_SOURCE -Wno-address-of-packed-member"
+  fi
+
   ./bootstrap
   ./configure \
     --disable-debug \
-    --prefix=/opt/zextras/common
-  make -j"$(( $(nproc) / 2 ))"
+    --prefix=/opt/zextras/common \
+    ${_host_flag} ${_build_flag}
+  make -j"$(($(nproc) / 2))"
 }
 
 package() {

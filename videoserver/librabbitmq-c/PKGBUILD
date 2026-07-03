@@ -6,11 +6,9 @@ pkgname="carbonio-librabbitmq-c"
 pkgver="0.15.0" # renovate: datasource=github-releases depName=alanxz/rabbitmq-c
 pkgrel="1"
 pkgdesc="RabbitMQ(amqp) library written in C-language"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
-section="libs"
-priority="important"
 depends=(
   "carbonio-openssl"
 )
@@ -28,9 +26,17 @@ sha256sums=('7b652df52c0de4d19ca36c798ed81378cba7a03a0f0c5d498881ae2d79b241c2')
 build() {
   export CFLAGS="-I/opt/zextras/common/include -ffile-prefix-map=${srcdir}=."
   export LDFLAGS="-Wl,-rpath,/opt/zextras/common/lib"
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:/opt/zextras/common/lib64/pkgconfig"
 
   cd "${srcdir}"
+
+  _cmake_cross_flags=""
+  if [ -n "${CROSS_COMPILE}" ]; then
+    _cmake_cross_flags="-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}"
+    export YAP_CMAKE_EXTRA_ROOT_PATH="/opt/zextras/common"
+    export PKG_CONFIG_LIBDIR="/opt/zextras/common/lib/pkgconfig:/opt/zextras/common/lib64/pkgconfig:${PKG_CONFIG_LIBDIR}"
+  fi
+
   cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/zextras/common \
     -DCMAKE_INSTALL_LIBDIR=lib \
@@ -42,10 +48,11 @@ build() {
     -DBUILD_API_DOCS=OFF \
     -DRUN_SYSTEM_TESTS=OFF \
     -Wno-dev \
+    ${_cmake_cross_flags} \
     -B build \
     -S "rabbitmq-c-${pkgver}"
 
-  make -C build -j"$(( $(nproc) / 2 ))"
+  make -C build -j"$(($(nproc) / 2))"
 }
 
 package() {

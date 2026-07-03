@@ -6,15 +6,16 @@ pkgname="carbonio-libnice"
 pkgver="0.1.23" # renovate: datasource=github-releases depName=libnice/libnice
 pkgrel="1"
 pkgdesc="An implementation of the IETF's draft ICE (for p2p UDP data streams)"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
 url="https://zextras.com"
-depends__apt=(
+depends=(
   "carbonio-openssl"
 )
 makedepends__apt=(
   "libglib2.0-dev"
   "ninja-build"
+  "pkg-config"
   "python3-pip"
 )
 makedepends__ubuntu_noble=(
@@ -22,10 +23,8 @@ makedepends__ubuntu_noble=(
   "meson"
   "ninja-build"
 )
-depends__yum=(
-  "carbonio-openssl"
-)
 makedepends__yum=(
+  "pkgconf-pkg-config"
   "glib2-devel"
   "meson"
   "ninja-build"
@@ -34,41 +33,42 @@ section="libs"
 priority="important"
 source=(
   "https://github.com/libnice/libnice/archive/${pkgver}.tar.gz"
+  "aarch64-cross.ini"
 )
-sha256sums=('cd69da89d70b529e2eac955de006503a318123d36196482b14005a83e7cb2c21')
+sha256sums=(
+  'cd69da89d70b529e2eac955de006503a318123d36196482b14005a83e7cb2c21'
+  'e2096a42d7c03110585adb96c49bf282f7ea245fbf299dd5e30ef84cf5b545d9'
+)
 
-build__apt() {
+_meson_build() {
   cd "${srcdir}/libnice-${pkgver}"
   export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
-  pip3 install meson
+  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig:/opt/zextras/common/lib64/pkgconfig"
+
+  _meson_cross_flag=""
+  if [ -n "${CROSS_COMPILE}" ] && echo "${CROSS_COMPILE}" | grep -q "aarch64"; then
+    _meson_cross_flag="--cross-file=${srcdir}/aarch64-cross.ini"
+  fi
+
   meson \
     --libdir=lib \
     --prefix=/opt/zextras/common build \
-    -Dgtk_doc=disabled
+    -Dgtk_doc=disabled \
+    ${_meson_cross_flag}
   meson compile -C build
+}
+
+build__apt() {
+  pip3 install meson
+  _meson_build
 }
 
 build__ubuntu_noble() {
-  cd "${srcdir}/libnice-${pkgver}"
-  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
-  meson \
-    --libdir=lib \
-    --prefix=/opt/zextras/common build \
-    -Dgtk_doc=disabled
-  meson compile -C build
+  _meson_build
 }
 
 build__yum() {
-  cd "${srcdir}/libnice-${pkgver}"
-  export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
-  export PKG_CONFIG_PATH="/opt/zextras/common/lib/pkgconfig"
-  meson \
-    --libdir=lib \
-    --prefix=/opt/zextras/common build \
-    -Dgtk_doc=disabled
-  meson compile -C build
+  _meson_build
 }
 
 package() {
