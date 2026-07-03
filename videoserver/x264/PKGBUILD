@@ -6,7 +6,7 @@ pkgname="carbonio-x264"
 pkgver="0.165.r3222" # renovate: datasource=gitlab-tags depName=videolan/x264
 pkgrel="1"
 pkgdesc="Open Source H264/AVC video encoder"
-arch=('x86_64')
+arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com>"
 url="https://www.videolan.org/developers/x264.html"
 license=("GPL-2.0-only")
@@ -27,12 +27,23 @@ build() {
   export CFLAGS="${CFLAGS} -ffile-prefix-map=${srcdir}=."
   ./version.sh | grep X264_POINTVER | sed -r 's/^#define X264_POINTVER "([0-9]+\.[0-9]+)\.([0-9]+) (.*)"$/\1.r\2.\3/'
 
+  _lto_flag="--enable-lto"
+  _cross_flags=""
+  if [ -n "${CROSS_COMPILE}" ]; then
+    export CC="${CROSS_COMPILE}gcc"
+    # LTO is not supported for cross-compilation in x264
+    _lto_flag="--disable-lto"
+    _cross_flags="--host=${CROSS_COMPILE_HOST} --cross-prefix=${CROSS_COMPILE} --disable-asm"
+  fi
+
   ./configure \
     --disable-avs \
-    --enable-lto \
+    ${_lto_flag} \
     --enable-pic \
     --enable-shared \
-    --prefix=/opt/zextras/common
+    --libdir=/opt/zextras/common/lib \
+    --prefix=/opt/zextras/common \
+    ${_cross_flags}
   make -j"$(( $(nproc) / 2 ))"
 }
 
