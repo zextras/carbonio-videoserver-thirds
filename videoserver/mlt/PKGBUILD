@@ -4,7 +4,7 @@
 
 pkgname=carbonio-mlt
 pkgver=7.38.0 # renovate: datasource=github-releases depName=mltframework/mlt
-pkgrel=1
+pkgrel=2
 pkgdesc='An open source multimedia framework'
 arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
@@ -58,6 +58,7 @@ build() {
   cmake -B build -S "${srcdir}/mlt-${pkgver}" \
     -DCMAKE_INSTALL_PREFIX="/opt/zextras/common" \
     -DCMAKE_PREFIX_PATH="/opt/zextras/common" \
+    -DCMAKE_INSTALL_LIBDIR=lib \
     -DMOD_DECKLINK=OFF \
     -DMOD_FREI0R=OFF \
     -DMOD_GDK=OFF \
