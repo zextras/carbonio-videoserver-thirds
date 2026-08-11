@@ -4,7 +4,7 @@
 
 pkgname="carbonio-ffmpeg"
 pkgver="8.1" # renovate: datasource=github-releases depName=FFmpeg/FFmpeg
-pkgrel="1"
+pkgrel="2"
 pkgdesc="Complete solution to record, convert and stream audio and video"
 arch=('aarch64' 'x86_64')
 maintainer="Zextras <packages@zextras.com"
