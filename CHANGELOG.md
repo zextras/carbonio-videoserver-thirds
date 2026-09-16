@@ -1,3 +1,5 @@
+## [1.5.0](https://github.com/zextras/carbonio-videoserver-thirds/compare/v1.4.0...v1.5.0) (2026-09-16)
+
 ## [1.4.0](https://github.com/zextras/carbonio-videoserver-thirds/compare/v1.3.0...v1.4.0) (2026-09-09)
 
 ## [1.3.0](https://github.com/zextras/carbonio-videoserver-thirds/compare/v1.2.0...v1.3.0) (2026-09-08)
