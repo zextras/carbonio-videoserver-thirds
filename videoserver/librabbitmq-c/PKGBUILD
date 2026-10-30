@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-librabbitmq-c"
-pkgver="0.15.0" # renovate: datasource=github-releases depName=alanxz/rabbitmq-c
+pkgver="0.18.1" # renovate: datasource=github-releases depName=alanxz/rabbitmq-c
 pkgrel="1"
 pkgdesc="RabbitMQ(amqp) library written in C-language"
 arch=('aarch64' 'x86_64')
