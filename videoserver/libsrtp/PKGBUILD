@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname="carbonio-libsrtp"
-pkgver="2.8.0" # renovate: datasource=github-releases depName=cisco/libsrtp
+pkgver="2.8.1" # renovate: datasource=github-releases depName=cisco/libsrtp
 pkgrel="1"
 pkgdesc="Library for SRTP (Secure Realtime Transport Protocol)"
 arch=('aarch64' 'x86_64')
