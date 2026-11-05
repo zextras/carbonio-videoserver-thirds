@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 pkgname=carbonio-mlt
-pkgver=7.38.0 # renovate: datasource=github-releases depName=mltframework/mlt
+pkgver=7.42.0 # renovate: datasource=github-releases depName=mltframework/mlt
 pkgrel=1
 pkgdesc='An open source multimedia framework'
 arch=('aarch64' 'x86_64')
@@ -37,7 +37,7 @@ replaces__yum=(
   'mlt'
 )
 source=("https://github.com/mltframework/mlt/releases/download/v${pkgver}/mlt-${pkgver}.tar.gz")
-sha256sums=('b8f0a23c89e9250edc5038d745537c382367bf2ad3dad5d5c7cd13b0fe1c4144')
+sha256sums=('8800e343f43aaa885bd5d9d23553030fa220aa3e2f0c94d9fd6a936d41638cdd')
 
 build() {
   export CFLAGS="-I/opt/zextras/common/include -ffile-prefix-map=${srcdir}=."
